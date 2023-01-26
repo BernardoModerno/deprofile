@@ -1,26 +1,64 @@
 import React from 'react';
-import { ScrollView } from 'react-native';
+import { ScrollView, KeyboardAvoidingView, Platform, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+
 import { Button } from '../../components/Form/Button';
 import { Input } from '../../components/Form/Input';
-import { Container, Content, Logo, Title } from './styles';
+import {
+  Container,
+  Content,
+  CreateAccount,
+  CreateAccountTitle,
+  ForgotPasswordButton,
+  ForgotPasswordTitle,
+  Icon,
+  Logo,
+  Title,
+} from './styles';
 import logo from '../../assets/logo.png';
 
-export const SignIn: React.FunctionComponent = () => {
-  return (
-    <ScrollView
-      keyboardShouldPersistTaps="handled"
-      contentContainerStyle={{ flex: 1 }}
-    >
-      <Container>
-        <Content>
-          <Logo source={logo} />
-          <Title>Faça seu logon</Title>
-          <Input placeholder="Email" />
-          <Input placeholder="Senha" />
+interface ScreenNavigationProp {
+  navigate: (screen: string) => void;
+}
 
-          <Button title="Entrar" />
-        </Content>
-      </Container>
-    </ScrollView>
+export const SignIn: React.FunctionComponent = () => {
+  const { navigate } = useNavigation<ScreenNavigationProp>();
+
+  return (
+    <KeyboardAvoidingView
+      enabled
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    >
+      <ScrollView
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ flex: 1 }}
+      >
+        <Container>
+          <Content>
+            <Logo source={logo} />
+            <View>
+              <Title>Faça seu logon</Title>
+            </View>
+            <Input placeholder="Email" />
+            <Input placeholder="Senha" />
+
+            <Button title="Entrar" />
+
+            <ForgotPasswordButton>
+              <ForgotPasswordTitle>Esqueci minha senha</ForgotPasswordTitle>
+            </ForgotPasswordButton>
+          </Content>
+        </Container>
+      </ScrollView>
+      <CreateAccount
+        onPress={() => {
+          navigate('SignUp');
+        }}
+      >
+        <Icon name="log-in" />
+        <CreateAccountTitle>Criar uma conta</CreateAccountTitle>
+      </CreateAccount>
+    </KeyboardAvoidingView>
   );
 };
